@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.vietmediaF2" name="VietmediaF2 Repository (Custom)" version="1.0.0" provider-name="qwertyvn">
+	<extension point="xbmc.addon.repository" name="VietmediaF2 Repository">
+		<dir>
+			<info compressed="false">https://qwertyvn.github.io/vmf/addons.xml</info>
+			<checksum>https://qwertyvn.github.io/vmf/addons.xml.md5</checksum>
+			<datadir zip="true">https://qwertyvn.github.io/vmf/</datadir>
+		</dir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>VietmediaF2 Repository (Custom Github)</summary>
+		<description>Kho repository cá nhân để cập nhật VietmediaF2 từ github.io</description>
+		<platform>all</platform>
+	</extension>
+</addon>
