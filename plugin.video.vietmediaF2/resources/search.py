@@ -133,15 +133,14 @@ def timfshare(query):
     query = query.replace("\n", "").replace(".", " ")
     query = query.replace('&ref=ref','')
     query = urllib.parse.quote_plus(query)
-    api_timfshare = 'https://api.timfshare.com/v1/string-query-search?query='
+    api_timfshare = 'https://tim.fshare.dpdns.org/search?q='
 
     headers = {
-        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-        'authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiZnNoYXJlIiwidXVpZCI6IjcxZjU1NjFkMTUiLCJ0eXBlIjoicGFydG5lciIsImV4cGlyZXMiOjAsImV4cGlyZSI6MH0.WBWRKbFf7nJ7gDn1rOgENh1_doPc07MNsKwiKCJg40U'
+        'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
     }
 
     try:
-        response = requests.post(api_timfshare + query, headers=headers, timeout=3)
+        response = requests.get(api_timfshare + query, headers=headers, timeout=5)
         response.raise_for_status()
         jsondata = response.json()
     except requests.exceptions.RequestException:
@@ -149,18 +148,15 @@ def timfshare(query):
         return {"content_type": "episodes", "items": []}
 
     items = []
-    for i in jsondata.get('data', []):
+    for i in jsondata.get('results', []):
         item = {}
         name = i.get('name', '')
-        furl = i.get('url', '')
-        filesize = float(i.get("size", 0))
-        type_f = i.get('file_type', '')
-
+        furl = i.get('download_url', '')
 
         if furl:
             furl = re.search(r"(.*)\?", furl).group(1) if '?' in furl else furl
             link = f'plugin://plugin.video.vietmediaF2?action=play&url={furl}'
-            playable = type_f != '0'
+            playable = True
         else:
             continue
 
@@ -170,7 +166,7 @@ def timfshare(query):
         item["thumbnail"] = 'fshare.png'
         item["icon"] = "fshareicon.png"
         item["label2"] = ""
-        item["info"] = {'plot': '', 'size': filesize}
+        item["info"] = {'plot': ''}
         items.append(item)
 
     data = {"content_type": "episodes", "items": items}
